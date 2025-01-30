@@ -1,6 +1,7 @@
-import 'package:ecommerce_app/src/features/shopping_cart/shopping_cart_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/src/constants/app_sizes.dart';
+import 'package:ecommerce_app/src/routing/app_router.dart';
+import 'package:go_router/go_router.dart';
 
 /// Shopping cart icon with items count badge
 class ShoppingCartIcon extends StatelessWidget {
@@ -19,12 +20,7 @@ class ShoppingCartIcon extends StatelessWidget {
           child: IconButton(
             key: shoppingCartIconKey,
             icon: const Icon(Icons.shopping_cart),
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                fullscreenDialog: true,
-                builder: (_) => const ShoppingCartScreen(),
-              ),
-            ),
+            onPressed: () => context.goNamed(AppRoute.cart.name),
           ),
         ),
         if (cartItemsCount > 0)
@@ -41,6 +37,7 @@ class ShoppingCartIcon extends StatelessWidget {
 /// Icon badge showing the items count
 class ShoppingCartIconBadge extends StatelessWidget {
   const ShoppingCartIconBadge({super.key, required this.itemsCount});
+
   final int itemsCount;
 
   @override
@@ -60,10 +57,7 @@ class ShoppingCartIconBadge extends StatelessWidget {
           // * textScaleFactor. This is to prevent the text from growing bigger
           // * than the available space.
           textScaler: const TextScaler.linear(1.0),
-          style: Theme.of(context)
-              .textTheme
-              .bodySmall!
-              .copyWith(color: Colors.white),
+          style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.white),
         ),
       ),
     );
