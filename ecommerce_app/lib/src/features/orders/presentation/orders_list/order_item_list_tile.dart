@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/src/common_widgets/async_value_widget.dart';
+import 'package:ecommerce_app/src/common_widgets/loading/card_shimmer.dart';
 import 'package:ecommerce_app/src/features/products/data/products_fake_repository.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:flutter/material.dart';
@@ -16,11 +17,12 @@ class OrderItemListTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final product = ref.watch(productProvider(item.productId));
 
-    return AsyncValueWidget(
-      value: product,
-      onData: (product) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: Sizes.p8),
-        child: Row(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: Sizes.p8),
+      child: AsyncValueWidget(
+        value: product,
+        onLoading: () => CardShimmer(),
+        onData: (product) => Row(
           children: [
             Flexible(
               flex: 1,

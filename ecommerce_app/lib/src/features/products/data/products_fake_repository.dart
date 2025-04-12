@@ -54,9 +54,9 @@ final productsSreamProvider = StreamProvider<List<Product>>((ref) {
 final productProvider =
     StreamProvider.autoDispose.family<Product?, String>((ref, id) {
   // Setting up a simples caching from provider
-  final link = ref.keepAlive();
+  //final link = ref.keepAlive();
   // Disposing provider after 10 seconds
-  Timer(const Duration(seconds: 10), () => link.close());
+  //Timer(const Duration(seconds: 10), () => link.close());
   final repo = ref.watch(productsRepositoryProvider);
   return repo.watchProduct(id);
 });

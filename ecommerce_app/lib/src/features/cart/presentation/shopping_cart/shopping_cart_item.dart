@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:ecommerce_app/src/common_widgets/alert_dialogs.dart';
 import 'package:ecommerce_app/src/common_widgets/async_value_widget.dart';
+import 'package:ecommerce_app/src/common_widgets/loading/card_shimmer.dart';
 import 'package:ecommerce_app/src/features/products/data/products_fake_repository.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:flutter/material.dart';
@@ -34,11 +35,12 @@ class ShoppingCartItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final productValue = ref.watch(productProvider(item.productId));
 
-    return AsyncValueWidget(
-      value: productValue,
-      onData: (product) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: Sizes.p8),
-        child: Card(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: Sizes.p8),
+      child: AsyncValueWidget(
+        value: productValue,
+        onLoading: () => CardShimmer(),
+        onData: (product) => Card(
           child: Padding(
             padding: const EdgeInsets.all(Sizes.p16),
             child: ShoppingCartItemContents(
