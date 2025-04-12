@@ -1,11 +1,8 @@
 import 'package:ecommerce_app/src/constants/test_products.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProductsFakeRepository {
-  ProductsFakeRepository._();
-
-  static ProductsFakeRepository instance = ProductsFakeRepository._();
-
   final List<Product> _products = kTestProducts;
 
   List<Product> getProducts() {
@@ -19,4 +16,38 @@ class ProductsFakeRepository {
       return null;
     }
   }
+
+  Future<List<Product>> fetchProductsList() async {
+    await Future.delayed(Duration(seconds: 2));
+    return Future.value(_products);
+  }
+
+  Stream<List<Product>> watchProductsList() async* {
+    await Future.delayed(Duration(seconds: 2));
+    yield _products;
+  }
+
+  Stream<Product?> watchProduct(String id) {
+    return watchProductsList()
+        .map((products) => products.firstWhere((product) => product.id == id));
+  }
 }
+
+final productsRepositoryProvider = Provider<ProductsFakeRepository>((ref) {
+  return ProductsFakeRepository();
+});
+
+final productsListFutureProvider = FutureProvider<List<Product>>((ref) {
+  final repo = ref.watch(productsRepositoryProvider);
+  return repo.fetchProductsList();
+});
+
+final productsSreamProvider = StreamProvider<List<Product>>((ref) {
+  final repo = ref.watch(productsRepositoryProvider);
+  return repo.watchProductsList();
+});
+
+//final productStreamProvider = StreamProvider<Product?>((ref) {
+  //final repo = ref.watch(productsRepositoryProvider);
+  //return repo.watchProduct(id);
+//});
