@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/src/common_widgets/error_message_widget.dart';
 import 'package:ecommerce_app/src/features/cart/presentation/add_to_cart/add_to_cart_widget.dart';
 import 'package:ecommerce_app/src/features/products/data/products_fake_repository.dart';
 import 'package:ecommerce_app/src/features/products/presentation/home_app_bar/home_app_bar.dart';
@@ -22,25 +23,29 @@ class ProductScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final productsRepository = ref.watch(productsRepositoryProvider);
-    final product = productsRepository.getProductById(productId);
+    final productValue = ref.watch(productProvider(productId));
 
     return Scaffold(
       appBar: const HomeAppBar(),
-      // ignore: unnecessary_null_comparison
-      body: product == null
-          ? EmptyPlaceholderWidget(
-              message: 'Product not found'.hardcoded,
-            )
-          : CustomScrollView(
-              slivers: [
-                ResponsiveSliverCenter(
-                  padding: const EdgeInsets.all(Sizes.p16),
-                  child: ProductDetails(product: product),
+      body: Consumer(
+        builder: (context, ref, child) => productValue.when(
+          data: (product) => product == null
+              ? EmptyPlaceholderWidget(
+                  message: 'Product not found'.hardcoded,
+                )
+              : CustomScrollView(
+                  slivers: [
+                    ResponsiveSliverCenter(
+                      padding: const EdgeInsets.all(Sizes.p16),
+                      child: ProductDetails(product: product),
+                    ),
+                    ProductReviewsList(productId: productId),
+                  ],
                 ),
-                ProductReviewsList(productId: productId),
-              ],
-            ),
+          error: (e, st) => Center(child: ErrorMessageWidget(e.toString())),
+          loading: () => Center(child: CircularProgressIndicator()),
+        ),
+      ),
     );
   }
 }

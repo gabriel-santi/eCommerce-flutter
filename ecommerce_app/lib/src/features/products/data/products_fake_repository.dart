@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ecommerce_app/src/constants/test_products.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -47,7 +49,14 @@ final productsSreamProvider = StreamProvider<List<Product>>((ref) {
   return repo.watchProductsList();
 });
 
-//final productStreamProvider = StreamProvider<Product?>((ref) {
-  //final repo = ref.watch(productsRepositoryProvider);
-  //return repo.watchProduct(id);
-//});
+// autoDispose modifier to dispose provider when no longer used by any widget
+// family modifier to pass values as argument to a Provider
+final productProvider =
+    StreamProvider.autoDispose.family<Product?, String>((ref, id) {
+  // Setting up a simples caching from provider
+  final link = ref.keepAlive();
+  // Disposing provider after 10 seconds
+  Timer(const Duration(seconds: 10), () => link.close());
+  final repo = ref.watch(productsRepositoryProvider);
+  return repo.watchProduct(id);
+});
