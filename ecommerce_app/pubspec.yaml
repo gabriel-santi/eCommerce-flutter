@@ -19,6 +19,7 @@ dependencies:
   go_router: 14.0.0
   flutter_riverpod: 2.3.6
   shimmer: ^3.0.0
+  rxdart: ^0.28.0
 
 dev_dependencies:
   flutter_test:
