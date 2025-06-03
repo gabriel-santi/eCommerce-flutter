@@ -104,7 +104,7 @@ class _EmailPasswordSignInContentsState
 
   void _updateFormType(EmailPasswordSignInFormType formType) {
     ref
-        .watch(emailPasswordSignInControllerProvider(widget.formType).notifier)
+        .read(emailPasswordSignInControllerProvider(widget.formType).notifier)
         .updateFormType(formType);
     _passwordController.clear();
   }
