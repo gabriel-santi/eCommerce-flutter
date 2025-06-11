@@ -15,35 +15,51 @@ void main() {
       expect(controller.debugState, const AsyncData<void>(null));
     });
 
-    test("SignOut successfuly", () async {
-      //setup
-      final authRepo = MockAuthRepository();
-      when(authRepo.signOut).thenAnswer((invocation) => Future.value());
-      final controller = AccountScreenController(authRepository: authRepo);
-      expectLater(
+    test(
+      "SignOut successfuly",
+      () async {
+        //setup
+        final authRepo = MockAuthRepository();
+        when(authRepo.signOut).thenAnswer((invocation) => Future.value());
+        final controller = AccountScreenController(authRepository: authRepo);
+        expectLater(
+            controller.stream,
+            emitsInOrder([
+              AsyncLoading<void>(),
+              AsyncData<void>(null),
+            ]));
+        // run
+        await controller.signOut();
+        //verify
+        verify(authRepo.signOut).called(1);
+      },
+      timeout: const Timeout(Duration(seconds: 1)),
+    );
+
+    test(
+      "SignOut failure",
+      () async {
+        //setup
+        final authRepo = MockAuthRepository();
+        final exception = Exception("Connection failed");
+        when(authRepo.signOut).thenThrow(exception);
+        final controller = AccountScreenController(authRepository: authRepo);
+        expectLater(
           controller.stream,
           emitsInOrder([
             AsyncLoading<void>(),
-            AsyncData<void>(null),
-          ]));
-      // run
-      await controller.signOut();
-      //verify
-      verify(authRepo.signOut).called(1);
-    });
-
-    test("SignOut failure", () async {
-      //setup
-      final authRepo = MockAuthRepository();
-      final exception = Exception("Connection failed");
-      when(authRepo.signOut).thenThrow(exception);
-      final controller = AccountScreenController(authRepository: authRepo);
-      // run
-      await controller.signOut();
-      //verify
-      verify(authRepo.signOut).called(1);
-      expect(controller.debugState.hasError, true);
-      expect(controller.debugState, isA<AsyncError>());
-    });
+            predicate<AsyncValue<void>>((value) {
+              expect(value.hasError, true);
+              return true;
+            })
+          ]),
+        );
+        // run
+        await controller.signOut();
+        //verify
+        verify(authRepo.signOut).called(1);
+      },
+      timeout: const Timeout(Duration(seconds: 1)),
+    );
   });
 }
