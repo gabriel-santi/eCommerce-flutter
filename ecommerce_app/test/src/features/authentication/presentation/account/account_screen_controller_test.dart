@@ -20,11 +20,16 @@ void main() {
       final authRepo = MockAuthRepository();
       when(authRepo.signOut).thenAnswer((invocation) => Future.value());
       final controller = AccountScreenController(authRepository: authRepo);
+      expectLater(
+          controller.stream,
+          emitsInOrder([
+            AsyncLoading<void>(),
+            AsyncData<void>(null),
+          ]));
       // run
       await controller.signOut();
       //verify
       verify(authRepo.signOut).called(1);
-      expect(controller.debugState, AsyncData<void>(null));
     });
 
     test("SignOut failure", () async {
