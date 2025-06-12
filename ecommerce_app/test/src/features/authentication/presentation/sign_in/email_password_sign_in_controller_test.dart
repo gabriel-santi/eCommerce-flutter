@@ -145,4 +145,52 @@ void main() {
       expect(result, false);
     }, timeout: const Timeout(Duration(milliseconds: 500)));
   });
+
+  group("UpdateFormType", () {
+    test('''
+      Given formType is register
+      When called with signIn
+      Then state.formType is signIn
+    ''', () {
+      // setup
+      final authRepo = MockAuthRepository();
+      final controller = EmailPasswordSignInController(
+        formType: EmailPasswordSignInFormType.register,
+        authRepository: authRepo,
+      );
+      // run
+      controller.updateFormType(EmailPasswordSignInFormType.signIn);
+      // verify
+      expect(
+        controller.debugState,
+        EmailPasswordSignInState(
+          formType: EmailPasswordSignInFormType.signIn,
+          value: AsyncData<void>(null),
+        ),
+      );
+    }, timeout: const Timeout(Duration(milliseconds: 500)));
+
+    test('''
+      Given formType is signIn
+      When called with register
+      Then state.formType is register
+    ''', () {
+      // setup
+      final authRepo = MockAuthRepository();
+      final controller = EmailPasswordSignInController(
+        formType: EmailPasswordSignInFormType.signIn,
+        authRepository: authRepo,
+      );
+      // run
+      controller.updateFormType(EmailPasswordSignInFormType.register);
+      // verify
+      expect(
+        controller.debugState,
+        EmailPasswordSignInState(
+          formType: EmailPasswordSignInFormType.register,
+          value: AsyncData<void>(null),
+        ),
+      );
+    }, timeout: const Timeout(Duration(milliseconds: 500)));
+  });
 }
