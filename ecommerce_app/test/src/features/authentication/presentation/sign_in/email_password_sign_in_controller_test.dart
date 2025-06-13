@@ -1,3 +1,4 @@
+@Timeout(Duration(milliseconds: 500))
 import 'package:ecommerce_app/src/features/authentication/presentation/sign_in/email_password_sign_in_controller.dart';
 import 'package:ecommerce_app/src/features/authentication/presentation/sign_in/email_password_sign_in_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,7 +42,7 @@ void main() {
       final result = await controller.submit(testEmail, testPassword);
       // verify
       expect(result, true);
-    }, timeout: const Timeout(Duration(milliseconds: 500)));
+    });
 
     test('''
     Given formType is signIn
@@ -75,7 +76,7 @@ void main() {
       final result = await controller.submit(testEmail, testPassword);
       // verify
       expect(result, false);
-    }, timeout: const Timeout(Duration(milliseconds: 500)));
+    });
 
     test('''
     Given formType is register
@@ -108,7 +109,7 @@ void main() {
       final result = await controller.submit(testEmail, testPassword);
       // verify
       expect(result, true);
-    }, timeout: const Timeout(Duration(milliseconds: 500)));
+    });
 
     test('''
     Given formType is register
@@ -142,7 +143,7 @@ void main() {
       final result = await controller.submit(testEmail, testPassword);
       // verify
       expect(result, false);
-    }, timeout: const Timeout(Duration(milliseconds: 500)));
+    });
   });
 
   group("UpdateFormType", () {
@@ -167,7 +168,7 @@ void main() {
           value: AsyncData<void>(null),
         ),
       );
-    }, timeout: const Timeout(Duration(milliseconds: 500)));
+    });
 
     test('''
       Given formType is signIn
@@ -190,6 +191,6 @@ void main() {
           value: AsyncData<void>(null),
         ),
       );
-    }, timeout: const Timeout(Duration(milliseconds: 500)));
+    });
   });
 }
