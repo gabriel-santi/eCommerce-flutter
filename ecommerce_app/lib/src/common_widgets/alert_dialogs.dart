@@ -28,22 +28,22 @@ Future<bool?> showAlertDialog({
               if (cancelActionText != null)
                 TextButton(
                   child: Text(cancelActionText),
-                  onPressed: () => context.pop(false),
+                  onPressed: () => Navigator.of(context).pop(false),
                 ),
               TextButton(
                 child: Text(defaultActionText),
-                onPressed: () => context.pop(true),
+                onPressed: () => Navigator.of(context).pop(true),
               ),
             ]
           : <Widget>[
               if (cancelActionText != null)
                 CupertinoDialogAction(
                   child: Text(cancelActionText),
-                  onPressed: () => context.pop(false),
+                  onPressed: () => Navigator.of(context).pop(false),
                 ),
               CupertinoDialogAction(
                 child: Text(defaultActionText),
-                onPressed: () => context.pop(true),
+                onPressed: () => Navigator.of(context).pop(true),
               ),
             ],
     ),
