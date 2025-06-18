@@ -1,4 +1,6 @@
 import 'package:ecommerce_app/src/common_widgets/alert_dialogs.dart';
+import 'package:ecommerce_app/src/features/authentication/data/auth_repository.dart';
+import 'package:ecommerce_app/src/features/authentication/data/fake_auth_repository.dart';
 import 'package:ecommerce_app/src/features/authentication/presentation/account/account_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,9 +11,13 @@ class AuthRobot {
 
   AuthRobot(this.tester);
 
-  Future<void> pumpAccountScreen() async {
+  Future<void> pumpAccountScreen({AuthRepository? authRepository}) async {
     await tester.pumpWidget(
-      const ProviderScope(
+      ProviderScope(
+        overrides: [
+          if (authRepository != null)
+            authRepositoryProvider.overrideWithValue(authRepository)
+        ],
         child: MaterialApp(
           home: AccountScreen(),
         ),
@@ -51,5 +57,15 @@ class AuthRobot {
 
     await tester.tap(logoutButton);
     await tester.pump();
+  }
+
+  void expectErrorDialogFound() {
+    final dialogTitle = find.text('Error');
+    expect(dialogTitle, findsOneWidget);
+  }
+
+  void expectErrorDialogNotFound() {
+    final dialogTitle = find.text('Error');
+    expect(dialogTitle, findsNothing);
   }
 }
