@@ -56,4 +56,50 @@ void main() {
       expect(didSignIn, true);
     });
   });
+
+  group("register", () {
+    testWidgets('''
+      Given formType is register
+      When tap on the submit button
+      Then createUserWithEmailAndPassword is not called
+    ''', (tester) async {
+      final r = AuthRobot(tester);
+      await r.pumpEmailPasswordSignInContents(
+        authRepository: authRepository,
+        formType: EmailPasswordSignInFormType.signIn,
+      );
+      await r.tapEmailPasswordSubmitButton();
+      verifyNever(
+        () => authRepository.createUserWithEmailAndPassword(any(), any()),
+      );
+    });
+
+    testWidgets('''
+      Given formType is register
+      When enter valid email and password 
+      And tap on the submit button
+      Then createUserWithEmailAndPassword is called
+      And signInWithEmailAndPassword is not called
+      And error popup not found
+    ''', (tester) async {
+      final r = AuthRobot(tester);
+      when(() => authRepository.createUserWithEmailAndPassword(
+          testEmail, testPassword)).thenAnswer((_) => Future.value());
+      await r.pumpEmailPasswordSignInContents(
+        authRepository: authRepository,
+        formType: EmailPasswordSignInFormType.register,
+      );
+      await r.enterEmail(testEmail);
+      await r.enterPassword(testPassword);
+      await r.tapEmailPasswordSubmitButton();
+      verify(
+        () => authRepository.createUserWithEmailAndPassword(
+            testEmail, testPassword),
+      ).called(1);
+      verifyNever(
+        () => authRepository.createUserWithEmailAndPassword(any(), any()),
+      );
+      r.expectErrorDialogNotFound();
+    });
+  });
 }
