@@ -1,0 +1,4 @@
+# In this file we can specify the tags that our tests can have for run separetelly from other without the tag
+tags:
+  unit:
+  widgets:
