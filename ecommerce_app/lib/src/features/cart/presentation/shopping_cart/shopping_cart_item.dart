@@ -5,6 +5,7 @@ import 'package:ecommerce_app/src/common_widgets/async_value_widget.dart';
 import 'package:ecommerce_app/src/common_widgets/loading/card_shimmer.dart';
 import 'package:ecommerce_app/src/features/products/data/products_fake_repository.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
+import 'package:ecommerce_app/src/utils/currency_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/src/common_widgets/custom_image.dart';
 import 'package:ecommerce_app/src/common_widgets/item_quantity_selector.dart';
@@ -57,7 +58,7 @@ class ShoppingCartItem extends ConsumerWidget {
 }
 
 /// Shows a shopping cart item for a given product
-class ShoppingCartItemContents extends StatelessWidget {
+class ShoppingCartItemContents extends ConsumerWidget {
   const ShoppingCartItemContents({
     super.key,
     required this.product,
@@ -74,10 +75,10 @@ class ShoppingCartItemContents extends StatelessWidget {
   static Key deleteKey(int index) => Key('delete-$index');
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // TODO: error handling
-    // TODO: Inject formatter
-    final priceFormatted = NumberFormat.simpleCurrency().format(product.price);
+    final priceFormatted =
+        ref.read(currencyFormatterProvider).format(product.price);
     return ResponsiveTwoColumnLayout(
       startFlex: 1,
       endFlex: 2,
@@ -94,28 +95,10 @@ class ShoppingCartItemContents extends StatelessWidget {
           gapH24,
           isEditable
               // show the quantity selector and a delete button
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ItemQuantitySelector(
-                      quantity: item.quantity,
-                      maxQuantity: min(product.availableQuantity, 10),
-                      itemIndex: itemIndex,
-                      // TODO: Implement onChanged
-                      onChanged: (value) {
-                        showNotImplementedAlertDialog(context: context);
-                      },
-                    ),
-                    IconButton(
-                      key: deleteKey(itemIndex),
-                      icon: Icon(Icons.delete, color: Colors.red[700]),
-                      // TODO: Implement onPressed
-                      onPressed: () {
-                        showNotImplementedAlertDialog(context: context);
-                      },
-                    ),
-                    const Spacer(),
-                  ],
+              ? EditOrRemoveItemWidget(
+                  product: product,
+                  item: item,
+                  itemIndex: itemIndex,
                 )
               // else, show the quantity as a read-only label
               : Padding(
@@ -126,6 +109,48 @@ class ShoppingCartItemContents extends StatelessWidget {
                 ),
         ],
       ),
+    );
+  }
+}
+
+class EditOrRemoveItemWidget extends ConsumerWidget {
+  const EditOrRemoveItemWidget({
+    super.key,
+    required this.product,
+    required this.item,
+    required this.itemIndex,
+  });
+  final Product product;
+  final Item item;
+  final int itemIndex;
+
+  // * Keys for testing using find.byKey()
+  static Key deleteKey(int index) => Key('delete-$index');
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ItemQuantitySelector(
+          quantity: item.quantity,
+          maxQuantity: min(product.availableQuantity, 10),
+          itemIndex: itemIndex,
+          // TODO: Implement onChanged
+          onChanged: (value) {
+            showNotImplementedAlertDialog(context: context);
+          },
+        ),
+        IconButton(
+          key: deleteKey(itemIndex),
+          icon: Icon(Icons.delete, color: Colors.red[700]),
+          // TODO: Implement onPressed
+          onPressed: () {
+            showNotImplementedAlertDialog(context: context);
+          },
+        ),
+        const Spacer(),
+      ],
     );
   }
 }
