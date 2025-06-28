@@ -14,7 +14,6 @@ import 'package:ecommerce_app/src/constants/app_sizes.dart';
 import 'package:ecommerce_app/src/features/cart/domain/item.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 /// Shows a shopping cart item (or loading/error UI if needed)
 class ShoppingCartItem extends ConsumerWidget {
