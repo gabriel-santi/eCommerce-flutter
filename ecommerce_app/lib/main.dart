@@ -1,4 +1,6 @@
 import 'package:ecommerce_app/src/app.dart';
+import 'package:ecommerce_app/src/features/cart/data/local/local_cart_repository.dart';
+import 'package:ecommerce_app/src/features/cart/data/local/sembast_cart_repository.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +12,15 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
   registerErrorHandlers();
-  runApp(ProviderScope(child: const MyApp()));
+  final localCartRepository = await SembastCartRepository.makeDefault();
+  runApp(
+    ProviderScope(
+      overrides: [
+        localCartRepositoryProvider.overrideWithValue(localCartRepository),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 void registerErrorHandlers() {
