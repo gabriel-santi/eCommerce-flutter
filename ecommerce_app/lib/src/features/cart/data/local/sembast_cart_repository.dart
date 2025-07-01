@@ -1,6 +1,7 @@
 import 'package:ecommerce_app/src/features/cart/data/local/local_cart_repository.dart';
 import 'package:ecommerce_app/src/features/cart/domain/cart.dart';
 import 'package:flutter/foundation.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
@@ -17,7 +18,8 @@ class SembastCartRepository implements LocalCartRepository {
       return databaseFactoryWeb.openDatabase(filename);
     } else {
       final appDocDir = await getApplicationDocumentsDirectory();
-      return databaseFactoryIo.openDatabase('${appDocDir.path}/$filename');
+      final path = join(appDocDir.path, filename);
+      return databaseFactoryIo.openDatabase(path);
     }
   }
 
