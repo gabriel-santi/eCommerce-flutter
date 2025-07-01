@@ -1,10 +1,12 @@
 import 'package:ecommerce_app/src/features/authentication/data/auth_repository.dart';
+import 'package:ecommerce_app/src/features/authentication/data/fake_auth_repository.dart';
 import 'package:ecommerce_app/src/features/cart/data/local/local_cart_repository.dart';
 import 'package:ecommerce_app/src/features/cart/data/remote/remote_cart_repository.dart';
 import 'package:ecommerce_app/src/features/cart/domain/cart.dart';
 import 'package:ecommerce_app/src/features/cart/domain/item.dart';
 import 'package:ecommerce_app/src/features/cart/domain/mutable_cart.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CartService {
   CartService(
@@ -62,3 +64,14 @@ class CartService {
     await _setCart(updated);
   }
 }
+
+final cartServiceProvider = Provider<CartService>((ref) {
+  final authRepository = ref.watch(authRepositoryProvider);
+  final localCartRepository = ref.watch(localCartRepositoryProvider);
+  final remoteCartRepository = ref.watch(remoteCartRepositoryProvider);
+
+  return CartService(
+      authRepository: authRepository,
+      localCartRepository: localCartRepository,
+      remoteCartRepository: remoteCartRepository);
+});
