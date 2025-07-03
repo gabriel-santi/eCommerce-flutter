@@ -58,8 +58,7 @@ class ProductDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final priceFormatted =
-        ref.read(currencyFormatterProvider).format(product.price);
+    final priceFormatted = ref.read(currencyFormatterProvider).format(product.price);
     return ResponsiveTwoColumnLayout(
       startContent: Card(
         child: Padding(
@@ -74,8 +73,7 @@ class ProductDetails extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(product.title,
-                  style: Theme.of(context).textTheme.titleLarge),
+              Text(product.title, style: Theme.of(context).textTheme.titleLarge),
               gapH8,
               Text(product.description),
               // Only show average if there is at least one rating
@@ -86,8 +84,7 @@ class ProductDetails extends ConsumerWidget {
               gapH8,
               const Divider(),
               gapH8,
-              Text(priceFormatted,
-                  style: Theme.of(context).textTheme.headlineSmall),
+              Text(priceFormatted, style: Theme.of(context).textTheme.headlineSmall),
               gapH8,
               LeaveReviewAction(productId: product.id),
               const Divider(),

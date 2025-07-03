@@ -25,6 +25,5 @@ class AddToCartController extends StateNotifier<AsyncValue<int>> {
 }
 
 final addToCartControllerProvider = StateNotifierProvider<AddToCartController, AsyncValue<int>>((ref) {
-  final cartService = ref.watch(cartServiceProvider);
-  return AddToCartController(cartService: cartService);
+  return AddToCartController(cartService: ref.watch(cartServiceProvider));
 });
