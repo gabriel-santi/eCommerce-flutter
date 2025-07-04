@@ -16,8 +16,7 @@ class FakeAuthRepository implements AuthRepository {
   Stream<AppUser?> authStateChanges() => _authState.stream;
 
   @override
-  Future<void> createUserWithEmailAndPassword(
-      String email, String password) async {
+  Future<void> createUserWithEmailAndPassword(String email, String password) async {
     await delay(addDelay);
     _createNewUser(email);
   }
@@ -36,8 +35,7 @@ class FakeAuthRepository implements AuthRepository {
   void dispose() => _authState.close();
 
   void _createNewUser(String email) {
-    _authState.value =
-        AppUser(uid: email.split('').reversed.join(), email: email);
+    _authState.value = AppUser(uid: email.split('').reversed.join(), email: email);
   }
 }
 
@@ -45,7 +43,7 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return FakeAuthRepository();
 });
 
-final authStateChangesProvider = StreamProvider.autoDispose<AppUser?>((ref) {
+final authStateChangesProvider = StreamProvider<AppUser?>((ref) {
   final repo = ref.watch(authRepositoryProvider);
   return repo.authStateChanges();
 });
