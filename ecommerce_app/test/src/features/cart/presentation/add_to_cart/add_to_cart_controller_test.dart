@@ -54,7 +54,9 @@ void main() {
     test('''
       Given a product with 3 units
       When add to cart succeed
-      Then value is AsyncData
+      Then value is updated
+      And starts loading
+      And value is 1
       ''', () async {
       // setup
       final item = Item(productId: '123', quantity: 3);
@@ -63,13 +65,51 @@ void main() {
       when(() => localCartRepository.setCart(any())).thenAnswer((_) => Future.value(null));
       final cartService = makeCartService();
       final controller = AddToCartController(cartService: cartService);
+      expectLater(
+          controller.stream,
+          emitsInOrder([
+            AsyncData(item.quantity),
+            AsyncLoading<int>().copyWithPrevious(AsyncData(item.quantity)),
+            AsyncData(1),
+          ]));
       // run
       controller.updateQuantity(item.quantity);
       await controller.addToCart(item.productId);
       // verify
       verify(() => localCartRepository.fetchCart()).called(1);
       verify(() => localCartRepository.setCart(any())).called(1);
-      expect(controller.debugState, AsyncData(1));
+    });
+
+    test('''
+      Given a product with 3 units
+      When add to cart failure
+      Then value is updated
+      And starts loading
+      And state has error
+      ''', () async {
+      // setup
+      final item = Item(productId: '123', quantity: 3);
+      final exception = Exception("Connection failed");
+      when(() => authRepository.currentUser).thenReturn(null);
+      when(localCartRepository.fetchCart).thenThrow(exception);
+      when(() => localCartRepository.setCart(any())).thenAnswer((_) => Future.value(null));
+      final cartService = makeCartService();
+      final controller = AddToCartController(cartService: cartService);
+      expectLater(
+          controller.stream,
+          emitsInOrder([
+            AsyncData(item.quantity),
+            AsyncLoading<int>().copyWithPrevious(AsyncData(item.quantity)),
+            predicate<AsyncValue<int>>((state) {
+              expect(state.hasError, true);
+              return true;
+            })
+          ]));
+      // run
+      controller.updateQuantity(item.quantity);
+      await controller.addToCart(item.productId);
+      // verify
+      verify(() => localCartRepository.fetchCart()).called(1);
     });
   });
 }
