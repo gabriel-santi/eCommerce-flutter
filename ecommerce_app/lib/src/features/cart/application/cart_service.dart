@@ -5,6 +5,7 @@ import 'package:ecommerce_app/src/features/cart/data/remote/remote_cart_reposito
 import 'package:ecommerce_app/src/features/cart/domain/cart.dart';
 import 'package:ecommerce_app/src/features/cart/domain/item.dart';
 import 'package:ecommerce_app/src/features/cart/domain/mutable_cart.dart';
+import 'package:ecommerce_app/src/features/products/data/products_fake_repository.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -84,5 +85,23 @@ final cartProvider = StreamProvider<Cart>((ref) {
 });
 
 final cartItemsCountProvider = Provider<int>((ref) {
-  return ref.watch(cartProvider).maybeMap(data: (state) => state.value.items.length, orElse: () => 0);
+  return ref.watch(cartProvider).maybeMap(
+        data: (state) => state.value.items.length,
+        orElse: () => 0,
+      );
+});
+
+final cartTotalPriceProvider = Provider<double>((ref) {
+  final cart = ref.watch(cartProvider).value ?? Cart();
+  final productsList = ref.watch(productsSreamProvider).value ?? [];
+  if (cart.items.isNotEmpty && productsList.isNotEmpty) {
+    final total = cart.items.entries.fold(0.0, (sum, item) {
+      final product = productsList.firstWhere((e) => e.id == item.key);
+      return sum + product.price * item.value;
+    });
+
+    return total;
+  } else {
+    return 0.0;
+  }
 });
