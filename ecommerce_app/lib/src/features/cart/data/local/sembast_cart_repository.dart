@@ -31,7 +31,7 @@ class SembastCartRepository implements LocalCartRepository {
 
   @override
   Future<Cart> fetchCart() async {
-    final cartJson = store.record(cartItemsKey).get(db) as String?;
+    final cartJson = await store.record(cartItemsKey).get(db) as String?;
     if (cartJson != null) {
       return Cart.fromJson(cartJson);
     } else {
