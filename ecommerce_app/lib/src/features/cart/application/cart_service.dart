@@ -91,7 +91,7 @@ final cartItemsCountProvider = Provider<int>((ref) {
       );
 });
 
-final cartTotalPriceProvider = Provider<double>((ref) {
+final cartTotalPriceProvider = Provider.autoDispose<double>((ref) {
   final cart = ref.watch(cartProvider).value ?? Cart();
   final productsList = ref.watch(productsSreamProvider).value ?? [];
   if (cart.items.isNotEmpty && productsList.isNotEmpty) {

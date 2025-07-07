@@ -46,15 +46,14 @@ final productsListFutureProvider = FutureProvider<List<Product>>((ref) {
   return repo.fetchProductsList();
 });
 
-final productsSreamProvider = StreamProvider<List<Product>>((ref) {
+final productsSreamProvider = StreamProvider.autoDispose<List<Product>>((ref) {
   final repo = ref.watch(productsRepositoryProvider);
   return repo.watchProductsList();
 });
 
 // autoDispose modifier to dispose provider when no longer used by any widget
 // family modifier to pass values as argument to a Provider
-final productProvider =
-    StreamProvider.autoDispose.family<Product?, String>((ref, id) {
+final productProvider = StreamProvider.autoDispose.family<Product?, String>((ref, id) {
   // Setting up a simples caching from provider
   //final link = ref.keepAlive();
   // Disposing provider after 10 seconds
