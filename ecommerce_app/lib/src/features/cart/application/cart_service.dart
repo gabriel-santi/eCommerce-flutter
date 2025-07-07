@@ -95,7 +95,7 @@ final cartItemsCountProvider = Provider<int>((ref) {
 
 final cartTotalPriceProvider = Provider.autoDispose<double>((ref) {
   final cart = ref.watch(cartProvider).value ?? Cart();
-  final productsList = ref.watch(productsSreamProvider).value ?? [];
+  final productsList = ref.watch(productsStreamProvider).value ?? [];
   if (cart.items.isNotEmpty && productsList.isNotEmpty) {
     final total = cart.items.entries.fold(0.0, (sum, item) {
       final product = productsList.firstWhere((e) => e.id == item.key);

@@ -14,7 +14,7 @@ void main() {
     }) {
       final container = ProviderContainer(overrides: [
         cartProvider.overrideWith((ref) => cart),
-        productsSreamProvider.overrideWith((ref) => productsList),
+        productsStreamProvider.overrideWith((ref) => productsList),
       ]);
       addTearDown(container.dispose);
       return container;
@@ -25,7 +25,7 @@ void main() {
         cart: const Stream.empty(),
         productsList: Stream.value(kTestProducts),
       );
-      await container.read(productsSreamProvider.future);
+      await container.read(productsStreamProvider.future);
       final total = container.read(cartTotalPriceProvider);
       expect(total, 0);
     });
@@ -36,7 +36,7 @@ void main() {
         productsList: Stream.value(kTestProducts),
       );
       await container.read(cartProvider.future);
-      await container.read(productsSreamProvider.future);
+      await container.read(productsStreamProvider.future);
       final total = container.read(cartTotalPriceProvider);
       expect(total, 0);
     });
@@ -47,7 +47,7 @@ void main() {
         productsList: Stream.value(kTestProducts),
       );
       await container.read(cartProvider.future);
-      await container.read(productsSreamProvider.future);
+      await container.read(productsStreamProvider.future);
       final total = container.read(cartTotalPriceProvider);
       expect(total, 15);
     });
@@ -58,7 +58,7 @@ void main() {
         productsList: Stream.value(kTestProducts),
       );
       await container.read(cartProvider.future);
-      await container.read(productsSreamProvider.future);
+      await container.read(productsStreamProvider.future);
       final total = container.read(cartTotalPriceProvider);
       expect(total, 75); // 15 * 5 = 75
     });
@@ -69,7 +69,7 @@ void main() {
         productsList: Stream.value(kTestProducts),
       );
       await container.read(cartProvider.future);
-      await container.read(productsSreamProvider.future);
+      await container.read(productsStreamProvider.future);
       expect(() => container.read(cartTotalPriceProvider), throwsStateError);
     });
   });

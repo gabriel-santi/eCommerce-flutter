@@ -46,7 +46,7 @@ final productsListFutureProvider = FutureProvider<List<Product>>((ref) {
   return repo.fetchProductsList();
 });
 
-final productsSreamProvider = StreamProvider.autoDispose<List<Product>>((ref) {
+final productsStreamProvider = StreamProvider.autoDispose<List<Product>>((ref) {
   final repo = ref.watch(productsRepositoryProvider);
   return repo.watchProductsList();
 });
