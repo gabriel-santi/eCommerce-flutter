@@ -1,18 +1,20 @@
 import 'package:ecommerce_app/src/app.dart';
-import 'package:ecommerce_app/src/constants/test_products.dart';
 import 'package:ecommerce_app/src/features/authentication/data/fake_auth_repository.dart';
 import 'package:ecommerce_app/src/features/products/data/products_fake_repository.dart';
 import 'package:ecommerce_app/src/features/products/presentation/home_app_bar/more_menu_button.dart';
-import 'package:ecommerce_app/src/features/products/presentation/products_list/product_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'features/authentication/auth_robot.dart';
+import 'features/products/products_robot.dart';
 
 class Robot {
-  Robot(this.tester) : authRobot = AuthRobot(tester);
+  Robot(this.tester)
+      : authRobot = AuthRobot(tester),
+        products = ProductsRobot(tester);
   final WidgetTester tester;
   final AuthRobot authRobot;
+  final ProductsRobot products;
 
   Future<void> pumpMyApp() async {
     final authRepository = FakeAuthRepository(addDelay: false);
@@ -26,11 +28,6 @@ class Robot {
     ));
     // Pump until there's no more frames to render
     await tester.pumpAndSettle();
-  }
-
-  void expectFindAllProductCards() {
-    final cards = find.byType(ProductCard);
-    expect(cards, findsNWidgets(kTestProducts.length));
   }
 
   Future<void> openPopupMenu() async {

@@ -38,10 +38,7 @@ class AuthRobot {
   Future<void> pumpAccountScreen({AuthRepository? authRepository}) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          if (authRepository != null)
-            authRepositoryProvider.overrideWithValue(authRepository)
-        ],
+        overrides: [if (authRepository != null) authRepositoryProvider.overrideWithValue(authRepository)],
         child: MaterialApp(
           home: AccountScreen(),
         ),
