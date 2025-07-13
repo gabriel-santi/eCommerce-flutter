@@ -16,11 +16,11 @@ import 'features/products/products_robot.dart';
 
 class Robot {
   Robot(this.tester)
-      : authRobot = AuthRobot(tester),
+      : auth = AuthRobot(tester),
         products = ProductsRobot(tester),
         cart = CartRobot(tester);
   final WidgetTester tester;
-  final AuthRobot authRobot;
+  final AuthRobot auth;
   final ProductsRobot products;
   final CartRobot cart;
 
@@ -59,5 +59,20 @@ class Robot {
       await tester.pumpAndSettle();
     }
     // else no-op, as the items are already visible
+  }
+
+  // navigation
+  Future<void> closePage() async {
+    final finder = find.byTooltip('Close');
+    expect(finder, findsOneWidget);
+    await tester.tap(finder);
+    await tester.pumpAndSettle();
+  }
+
+  Future<void> goBack() async {
+    final finder = find.byTooltip('Back');
+    expect(finder, findsOneWidget);
+    await tester.tap(finder);
+    await tester.pumpAndSettle();
   }
 }

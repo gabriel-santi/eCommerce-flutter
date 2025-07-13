@@ -8,13 +8,13 @@ void main() {
     await r.pumpMyApp();
     r.products.expectFindAllProductCards();
     await r.openPopupMenu();
-    await r.authRobot.openEmailAndPasswordSignInScreen();
-    await r.authRobot.signInWithEmailAndPassword();
+    await r.auth.openEmailAndPasswordSignInScreen();
+    await r.auth.signInWithEmailAndPassword();
     r.products.expectFindAllProductCards();
     await r.openPopupMenu();
-    await r.authRobot.openAccountScreen();
-    await r.authRobot.tapLogoutButton();
-    await r.authRobot.tapDialogLogoutButton();
+    await r.auth.openAccountScreen();
+    await r.auth.tapLogoutButton();
+    await r.auth.tapDialogLogoutButton();
     r.products.expectFindAllProductCards();
   });
 }
