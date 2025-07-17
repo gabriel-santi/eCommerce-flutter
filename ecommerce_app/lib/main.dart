@@ -18,7 +18,7 @@ void main() async {
   final localCartRepository = await SembastCartRepository.makeDefault();
   final container = ProviderContainer(overrides: [
     localCartRepositoryProvider.overrideWithValue(localCartRepository),
-    remoteCartRepositoryProvider.overrideWithValue(FakeRemoteCartRepository())
+    remoteCartRepositoryProvider.overrideWithValue(FakeRemoteCartRepository(addDelay: false))
   ]);
   // * Initialize CartSyncService to start the listener
   container.read(cartSyncServiceProvider);
