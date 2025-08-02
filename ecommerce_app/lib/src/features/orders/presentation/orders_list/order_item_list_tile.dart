@@ -18,7 +18,7 @@ class OrderItemListTile extends ConsumerWidget {
     final product = ref.watch(productProvider(item.productId));
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: Sizes.p8),
+      padding: const EdgeInsets.symmetric(vertical: Sizes.p8, horizontal: Sizes.p12),
       child: AsyncValueWidget(
         value: product,
         onLoading: () => CardShimmer(),
@@ -30,7 +30,7 @@ class OrderItemListTile extends ConsumerWidget {
             ),
             gapW8,
             Flexible(
-              flex: 3,
+              flex: 5,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
