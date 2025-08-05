@@ -12,17 +12,23 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'features/authentication/auth_robot.dart';
 import 'features/cart/cart_robot.dart';
+import 'features/checkout/checkout_robot.dart';
+import 'features/orders/orders_robot.dart';
 import 'features/products/products_robot.dart';
 
 class Robot {
   Robot(this.tester)
       : auth = AuthRobot(tester),
         products = ProductsRobot(tester),
-        cart = CartRobot(tester);
+        cart = CartRobot(tester),
+        checkout = CheckoutRobot(tester),
+        orders = OrdersRobot(tester);
   final WidgetTester tester;
   final AuthRobot auth;
   final ProductsRobot products;
   final CartRobot cart;
+  final CheckoutRobot checkout;
+  final OrdersRobot orders;
 
   Future<void> pumpMyApp() async {
     final authRepository = FakeAuthRepository(addDelay: false);

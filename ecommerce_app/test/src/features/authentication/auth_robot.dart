@@ -132,4 +132,11 @@ class AuthRobot {
     await tester.tap(accountButton);
     await tester.pumpAndSettle();
   }
+
+  void expectEmailAndPasswordFieldsFound() {
+    final emailField = find.byKey(EmailPasswordSignInScreen.emailKey);
+    expect(emailField, findsOneWidget);
+    final passwordField = find.byKey(EmailPasswordSignInScreen.passwordKey);
+    expect(passwordField, findsOneWidget);
+  }
 }
