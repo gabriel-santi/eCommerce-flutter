@@ -6,8 +6,7 @@ void main() {
   final email = "test@email.com";
   final password = "password123";
   final testUser = AppUser(uid: email.split('').reversed.join(), email: email);
-  FakeAuthRepository makeAuthRepository() =>
-      FakeAuthRepository(addDelay: false);
+  FakeAuthRepository makeAuthRepository() => FakeAuthRepository(addDelay: false);
   group("FakeAuthRepository", () {
     test("current user is null", () {
       final authRepository = makeAuthRepository();
@@ -17,12 +16,15 @@ void main() {
     });
   });
 
-  test("current user is not null after sign in", () async {
+  test('sign in throws when user not found', () async {
     final authRepository = makeAuthRepository();
     addTearDown(authRepository.dispose);
-    await authRepository.signInWithEmailAndPassword(email, password);
-    expect(authRepository.currentUser, testUser);
-    expect(authRepository.authStateChanges(), emits(testUser));
+    await expectLater(
+      () => authRepository.signInWithEmailAndPassword(email, password),
+      throwsA(isA<Exception>()),
+    );
+    expect(authRepository.currentUser, null);
+    expect(authRepository.authStateChanges(), emits(null));
   });
 
   test("current user is not null after create", () async {
@@ -45,13 +47,10 @@ void main() {
     expect(authRepository.authStateChanges(), emits(null));
   });
 
-  test("sign in after dispose throws exception", () async {
+  test("create user after dispose throws exception", () async {
     final authRepository = makeAuthRepository();
     addTearDown(authRepository.dispose);
     authRepository.dispose();
-    expect(
-        () async =>
-            await authRepository.signInWithEmailAndPassword(email, password),
-        throwsStateError);
+    expect(() async => await authRepository.createUserWithEmailAndPassword(email, password), throwsStateError);
   });
 }
