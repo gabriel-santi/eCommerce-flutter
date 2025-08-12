@@ -20,7 +20,18 @@ class FakeAuthRepository implements AuthRepository {
   @override
   Future<void> createUserWithEmailAndPassword(String email, String password) async {
     await delay(addDelay);
-    _createNewUser(email);
+    // check if the email is already in use
+    for (final u in _users) {
+      if (u.email == email) {
+        throw Exception('Email already in use'.hardcoded);
+      }
+    }
+    // minimum password length requirement
+    if (password.length < 8) {
+      throw Exception('Password is too weak'.hardcoded);
+    }
+    // create new user
+    _createNewUser(email, password);
   }
 
   // List to keep track of all user accounts
@@ -51,8 +62,17 @@ class FakeAuthRepository implements AuthRepository {
 
   void dispose() => _authState.close();
 
-  void _createNewUser(String email) {
-    _authState.value = AppUser(uid: email.split('').reversed.join(), email: email);
+  void _createNewUser(String email, String password) {
+    // create new user
+    final user = FakeAppUser(
+      uid: email.split('').reversed.join(),
+      email: email,
+      password: password,
+    );
+    // register it
+    _users.add(user);
+    // update the auth state
+    _authState.value = user;
   }
 }
 
