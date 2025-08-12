@@ -16,7 +16,7 @@ void main() {
   setUpAll(() {
     registerFallbackValue(const Cart());
   });
-  const testUser = AppUser(uid: 'abc');
+  const testUser = AppUser(uid: 'abc', email: "test@test.com");
 
   late AuthRepository authRepository;
   late LocalCartRepository localCartRepository;
