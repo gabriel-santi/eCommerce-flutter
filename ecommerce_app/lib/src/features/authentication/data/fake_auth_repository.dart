@@ -1,5 +1,7 @@
 import 'package:ecommerce_app/src/features/authentication/domain/app_user.dart';
 import 'package:ecommerce_app/src/features/authentication/data/auth_repository.dart';
+import 'package:ecommerce_app/src/features/authentication/domain/fake_app_user.dart';
+import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:ecommerce_app/src/utils/delay.dart';
 import 'package:ecommerce_app/src/utils/in_memory_store.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,10 +23,25 @@ class FakeAuthRepository implements AuthRepository {
     _createNewUser(email);
   }
 
+  // List to keep track of all user accounts
+  final List<FakeAppUser> _users = [];
+
   @override
   Future<void> signInWithEmailAndPassword(String email, String password) async {
     await delay(addDelay);
-    _createNewUser(email);
+    // check the given credentials agains each registered user
+    for (final u in _users) {
+      // matching email and password
+      if (u.email == email && u.password == password) {
+        _authState.value = u;
+        return;
+      }
+      // same email, wrong password
+      if (u.email == email && u.password != password) {
+        throw Exception('Wrong password'.hardcoded);
+      }
+    }
+    throw Exception('User not found'.hardcoded);
   }
 
   @override
