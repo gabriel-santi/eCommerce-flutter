@@ -3,6 +3,7 @@ import 'package:ecommerce_app/src/features/cart/application/cart_service.dart';
 import 'package:ecommerce_app/src/features/cart/data/local/local_cart_repository.dart';
 import 'package:ecommerce_app/src/features/cart/data/remote/remote_cart_repository.dart';
 import 'package:ecommerce_app/src/features/checkout/application/fake_checkout_service.dart';
+import 'package:ecommerce_app/src/features/orders/data/fake_orders_repository.dart';
 import 'package:ecommerce_app/src/features/products/data/products_fake_repository.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -17,3 +18,5 @@ class MockProductsRepository extends Mock implements ProductsFakeRepository {}
 class MockCartService extends Mock implements CartService {}
 
 class MockCheckoutService extends Mock implements FakeCheckoutService {}
+
+class MockOrdersRepository extends Mock implements FakeOrdersRepository {}
