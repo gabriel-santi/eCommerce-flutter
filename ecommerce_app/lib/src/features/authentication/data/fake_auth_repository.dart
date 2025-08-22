@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/src/exceptions/app_exceptions.dart';
 import 'package:ecommerce_app/src/features/authentication/domain/app_user.dart';
 import 'package:ecommerce_app/src/features/authentication/data/auth_repository.dart';
 import 'package:ecommerce_app/src/features/authentication/domain/fake_app_user.dart';
@@ -23,12 +24,12 @@ class FakeAuthRepository implements AuthRepository {
     // check if the email is already in use
     for (final u in _users) {
       if (u.email == email) {
-        throw Exception('Email already in use'.hardcoded);
+        throw EmailAlreadyInUseException();
       }
     }
     // minimum password length requirement
     if (password.length < 8) {
-      throw Exception('Password is too weak'.hardcoded);
+      throw WeakPasswordException();
     }
     // create new user
     _createNewUser(email, password);
@@ -49,10 +50,10 @@ class FakeAuthRepository implements AuthRepository {
       }
       // same email, wrong password
       if (u.email == email && u.password != password) {
-        throw Exception('Wrong password'.hardcoded);
+        throw WrongPasswordException();
       }
     }
-    throw Exception('User not found'.hardcoded);
+    throw UserNotFoundException();
   }
 
   @override
