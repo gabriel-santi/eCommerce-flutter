@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/src/exceptions/app_exceptions.dart';
 import 'package:ecommerce_app/src/features/authentication/data/fake_auth_repository.dart';
 import 'package:ecommerce_app/src/features/authentication/domain/app_user.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -21,7 +22,7 @@ void main() {
     addTearDown(authRepository.dispose);
     await expectLater(
       () => authRepository.signInWithEmailAndPassword(email, password),
-      throwsA(isA<Exception>()),
+      throwsA(isA<UserNotFoundException>()),
     );
     expect(authRepository.currentUser, null);
     expect(authRepository.authStateChanges(), emits(null));
