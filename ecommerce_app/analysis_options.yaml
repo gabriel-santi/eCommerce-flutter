@@ -4,6 +4,11 @@ analyzer:
   exclude:
     - '**/*.g.dart'
     - '**/*.freezed.dart'
+    - build/**
+    - ios/**
+    - android/**
+    - .dart_tool/**
+    - test_driver/**
 
 linter:
   rules:
