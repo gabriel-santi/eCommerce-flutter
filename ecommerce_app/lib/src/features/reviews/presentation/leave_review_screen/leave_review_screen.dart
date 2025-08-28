@@ -1,16 +1,17 @@
 import 'package:ecommerce_app/src/common_widgets/alert_dialogs.dart';
+import 'package:ecommerce_app/src/common_widgets/primary_button.dart';
+import 'package:ecommerce_app/src/common_widgets/responsive_center.dart';
+import 'package:ecommerce_app/src/constants/app_sizes.dart';
 import 'package:ecommerce_app/src/constants/breakpoints.dart';
+import 'package:ecommerce_app/src/features/products/domain/product.dart';
+import 'package:ecommerce_app/src/features/reviews/domain/review.dart';
 import 'package:ecommerce_app/src/features/reviews/presentation/product_reviews/product_rating_bar.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:flutter/material.dart';
-import 'package:ecommerce_app/src/common_widgets/responsive_center.dart';
-import 'package:ecommerce_app/src/common_widgets/primary_button.dart';
-import 'package:ecommerce_app/src/constants/app_sizes.dart';
-import 'package:ecommerce_app/src/features/reviews/domain/review.dart';
 
 class LeaveReviewScreen extends StatelessWidget {
   const LeaveReviewScreen({super.key, required this.productId});
-  final String productId;
+  final ProductID productId;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,7 @@ class LeaveReviewScreen extends StatelessWidget {
 
 class LeaveReviewForm extends StatefulWidget {
   const LeaveReviewForm({super.key, required this.productId, this.review});
-  final String productId;
+  final ProductID productId;
   final Review? review;
 
   // * Keys for testing using find.byKey()
