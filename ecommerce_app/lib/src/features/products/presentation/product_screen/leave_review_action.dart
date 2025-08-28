@@ -1,11 +1,11 @@
-import 'package:ecommerce_app/src/features/orders/domain/purchase.dart';
+import 'package:ecommerce_app/src/common_widgets/custom_text_button.dart';
+import 'package:ecommerce_app/src/common_widgets/responsive_two_column_layout.dart';
+import 'package:ecommerce_app/src/constants/app_sizes.dart';
+import 'package:ecommerce_app/src/features/orders/domain/order.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:ecommerce_app/src/routing/app_router.dart';
 import 'package:ecommerce_app/src/utils/date_formatter.dart';
 import 'package:flutter/material.dart';
-import 'package:ecommerce_app/src/common_widgets/custom_text_button.dart';
-import 'package:ecommerce_app/src/common_widgets/responsive_two_column_layout.dart';
-import 'package:ecommerce_app/src/constants/app_sizes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -18,12 +18,18 @@ class LeaveReviewAction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // TODO: Read from data source
-    final purchase = Purchase(orderId: 'abc', orderDate: DateTime.now());
-    // ignore: unnecessary_null_comparison
-    if (purchase != null) {
-      // TODO: Inject date formatter
-      final dateFormatted =
-          ref.read(dateFormatterProvider).format(purchase.orderDate);
+    final orders = [
+      Order(
+        id: 'abc',
+        userId: '123',
+        items: {productId: 1},
+        orderStatus: OrderStatus.confirmed,
+        orderDate: DateTime.now(),
+        total: 15.0,
+      )
+    ];
+    if (orders.isNotEmpty) {
+      final dateFormatted = ref.read(dateFormatterProvider).format(orders.first.orderDate);
       return Column(
         children: [
           const Divider(),
@@ -39,10 +45,7 @@ class LeaveReviewAction extends ConsumerWidget {
             startContent: Text('Purchased on $dateFormatted'.hardcoded),
             endContent: CustomTextButton(
               text: 'Leave a review'.hardcoded,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge!
-                  .copyWith(color: Colors.green[700]),
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.green[700]),
               onPressed: () => context.goNamed(
                 AppRoute.leaveReview.name,
                 pathParameters: {'id': productId},
