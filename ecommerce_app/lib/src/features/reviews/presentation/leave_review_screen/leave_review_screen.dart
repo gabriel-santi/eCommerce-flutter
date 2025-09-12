@@ -63,6 +63,10 @@ class _LeaveReviewFormState extends ConsumerState<LeaveReviewForm> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<AsyncValue>(leaveReviewControllerProvider, (_, state) => state.showAlertDialogError(context),);
+
+    final state = ref.watch(leaveReviewControllerProvider);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -93,12 +97,14 @@ class _LeaveReviewFormState extends ConsumerState<LeaveReviewForm> {
         gapH32,
         PrimaryButton(
           text: 'Submit'.hardcoded,
-          // TODO: Loading state
-          isLoading: false,
+          isLoading: state.isLoading,
           onPressed: _rating == 0
               ? null
-              // TODO: submit review
-              : () => showNotImplementedAlertDialog(context: context),
+              : () => ref.read(leaveReviewControllerProvider.notifier).submitReview(
+                productID: widget.productID,
+                rating: _rating,
+                comment: _controller.text,
+              )
         )
       ],
     );
