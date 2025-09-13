@@ -23,7 +23,10 @@ class LeaveReviewController extends StateNotifier<AsyncValue<void>> {
       date: currentDateBuilder(),
     );
     state = AsyncLoading();
-    state = await AsyncValue.guard(() => reviewService.submitReview(productId: productId, review: review));
+    final newState = await AsyncValue.guard(() => reviewService.submitReview(productId: productId, review: review));
+    if (mounted) {
+      state = newState;
+    }
   }
 }
 
